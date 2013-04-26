@@ -127,7 +127,11 @@ sub doWork ## Each thread will call this function. Actual work is done here.
     my $err;
 
     ($out,$err)=$ssh->capture2($SSH_COMMAND);
-
+    
+    if($err)
+    {
+        generateOutput($host.",".$err."\n");
+    }
     generateOutput($host.",".$out."\n");
     return;
 }
@@ -170,8 +174,7 @@ if(exists($options{d})){$debug=1;}
 
 my $filekey=time;
 chomp $filekey;
-our $output_file="SSHOUT.err";
-`>$output_file`;
+our $output_file="SSHOUT.$filekey.err";
 
 my @full_server_list=getInput($options{f});
 
